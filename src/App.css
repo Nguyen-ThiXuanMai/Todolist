@@ -1,0 +1,61 @@
+.todolist {
+  border-radius: 2px;
+  margin: 5% 5%;
+  background-color: rgb(0, 0, 0);
+  box-sizing: border-box;
+  color: rgb(255, 255, 255);
+  padding: 20px;
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 10px;
+}
+.title-text {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.task-input {
+  width: 100%;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #fff;
+  background-color: transparent;
+  color: #fff;
+  box-shadow: none;
+  border-radius: 0;
+  margin-right: 10px;
+}
+
+.add-task {
+  height: 35px;
+  font-size: 14px;
+  display: flex;
+} 
+
+.list li{
+  position: relative;
+  height: 45px;
+}
+
+.list li span{
+  position: absolute;
+  right: 0px;
+}
+
+.btn-edit {
+  border: 2px solid DodgerBlue;
+  border-radius: 5px;
+  background-color: DodgerBlue;
+}
+
+.btn-delete {
+  border: 2px solid red;
+  border-radius: 5px;
+  background-color: red;
+}
+
+.btn-icon {
+  padding: 10px 10px;
+  background-color: white;
+  border: 0px solid white;
+
+}
