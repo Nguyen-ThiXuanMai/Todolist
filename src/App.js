@@ -1,14 +1,12 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import AddToDo from "./components/addtodo";
+import React from "react";
+import { Example } from "./components/example";
 import Todolist from "./components/todolist";
 
 function App(props) {
   return (
     <div className="todolist">
-      <label className="title-text">To Do List</label> <br />
       <Todolist />
+      {/* <Example /> */}
     </div>
   );
 }

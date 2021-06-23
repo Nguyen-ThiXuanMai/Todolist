@@ -1,7 +1,6 @@
 .todolist {
   border-radius: 2px;
   margin: 5% 5%;
-  background-color: rgb(0, 0, 0);
   box-sizing: border-box;
   color: rgb(255, 255, 255);
   padding: 20px;
@@ -10,52 +9,118 @@
 }
 .title-text {
   font-size: 25px;
-  font-weight: bold;
-}
-
-.task-input {
-  width: 100%;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid #fff;
-  background-color: transparent;
-  color: #fff;
-  box-shadow: none;
-  border-radius: 0;
+  margin-left: 20px;
   margin-right: 10px;
 }
 
-.add-task {
+.create-todoList {
   height: 35px;
   font-size: 14px;
   display: flex;
+  margin: 0px 100px;
 } 
 
-.list li{
-  position: relative;
-  height: 45px;
-}
-
-.list li span{
-  position: absolute;
-  right: 0px;
-}
-
-.btn-edit {
-  border: 2px solid DodgerBlue;
-  border-radius: 5px;
-  background-color: DodgerBlue;
-}
-
-.btn-delete {
-  border: 2px solid red;
-  border-radius: 5px;
-  background-color: red;
+.input-todoList {
+  width: 50%;
+  height: 28px;
+  border: 2px solid #fff;
+  color: #9e9e9e;
+  border-radius: 4px;
+  margin-left:19.8%;
 }
 
 .btn-icon {
   padding: 10px 10px;
   background-color: white;
   border: 0px solid white;
-
+  margin-right: 45px;
+  cursor: pointer;
 }
+
+.list-todo div{
+  position: relative;
+  height: 40px;
+  width: 44%;
+  list-style-type: none;
+  background: #fff;
+  color: #9e9e9e;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  margin-left: 22%;
+}
+
+.list-todo div span{
+  position: absolute;
+  right: 20px;
+  top:22%;
+}
+
+.icon-edit {
+  border-radius: 2px;
+  font-size: 18px;
+  cursor: pointer;
+  height: 20px;
+  width: 20%;
+  color: #0baf6b;
+  /* font-weight: bold; */
+  /* color: #fff; */
+}
+
+.icon-delete {
+  border-radius: 2px;
+  font-size: 18px;
+  margin-left: 5px;
+  height: 20px;
+  width: 20%;
+  cursor: pointer;
+  color: rgb(230, 87, 87);
+}
+
+/* .isComplete {
+  text-decoration: line-through;
+} */
+.title-todo {
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+  padding: 18px 18px 18px 40px;
+  display: block;
+  transform: translate(0, -20%);
+}
+.title-todo + .todo-did {
+  text-decoration: line-through;
+  position: relative;
+  height: 40px;
+  width: 44%;
+  list-style-type: none;
+  background: rgb(56, 104, 235);
+  color: #9e9e9e;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  margin-left: 22%;
+}
+
+.box-check {
+  display: inline-block;
+  border-radius: 6px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  transition: 0.3s ease;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(30%, -70%);
+  }
+
+  .edit-todo {
+    height: 22px;
+    width: 40%;
+    border-radius: 4px;
+    border: 2px solid #9e9e9e;;
+    color: #9e9e9e;
+    margin-left: 40px;
+    margin-top: 6px;
+  }
