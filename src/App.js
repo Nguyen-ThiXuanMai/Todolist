@@ -1,12 +1,10 @@
 import React from "react";
-import { Example } from "./components/example";
-import Todolist from "./components/todolist";
+import { TodoList } from "./components/todolist";
 
 function App(props) {
   return (
-    <div className="todolist">
-      <Todolist />
-      {/* <Example /> */}
+    <div className="todo-app-container">
+      <TodoList />
     </div>
   );
 }

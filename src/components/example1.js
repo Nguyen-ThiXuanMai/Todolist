@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   faCheck,
   faEdit,
+  faPlus,
   faSpinner,
   faTimes,
   faTrashAlt,
@@ -9,7 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../App.css";
 
-function AddTodo() {
+function Todolist() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [todoList, setTodoList] = useState([]);
@@ -18,7 +19,7 @@ function AddTodo() {
   const [needLoadAgain, setNeedLoadAgain] = useState(false);
   const [editing, setEditing] = useState(""); //khi cần xác định dòng nào đang sửa
 
-  //Get AddTodo
+  //Get Todolist
   useEffect(() => {
     setIsLoading(true);
     fetch("https://60d02d3b7de0b20017107d55.mockapi.io/todo", {
@@ -168,15 +169,12 @@ function AddTodo() {
     <main>
       <div className="glass">
         <img
+          style={{ height: 150, marginLeft: "40%" }}
           src="./images/logo-todolist.png"
-          style={{
-            height: 200,
-            width: 200,
-            marginLeft: "40%",
-          }}
         />
         <div className="title-text">
-          <label>To Do List 😍😘😍</label>
+          <label className="title-text">To Do List </label>
+          {/* //😍😘😍 */}
           {error && <alert>Error: {error.message}</alert>}
           {isLoading && (
             <FontAwesomeIcon icon={faSpinner} style={{ fontSize: 25 }} />
@@ -186,25 +184,26 @@ function AddTodo() {
           <input
             className="input-todoList"
             value={name}
-            placeholder="✍ Add todo ..."
+            placeholder="✍   Add todo ..."
             onChange={handleValueCreate}
             required
           />
-          {/* <button className="btn-icon" type="submit"> */}
-          {/* <FontAwesomeIcon icon={editing ? faSave : faPlus} /> */}
-          {/* <FontAwesomeIcon icon={faPlus} />
-        </button> */}
+          <button className="btn-icon" type="submit">
+            {/* <FontAwesomeIcon icon={editing ? faSave : faPlus} /> */}
+            <FontAwesomeIcon className="icon-add" icon={faPlus} />
+          </button>
         </form>{" "}
-        <ul>
+        <ul className="list-todo">
           {todoList.map((item) => {
             return (
-              <div className="list-todo">
+              <div>
                 <li key={item.id} onClick={() => handleClickToDo(item)}>
                   <input
                     type="checkbox"
                     className="box-check"
                     checked={item.status === "did" ? true : false} //number, undefined, null, 0 --> true false/ {}, "" -> true
                   />
+
                   {!item.editing && (
                     <label
                       className={`title-todo ${
@@ -219,72 +218,72 @@ function AddTodo() {
                       {item.name}
                     </label>
                   )}
-                  {item.editing && (
-                    <input
-                      className="edit-todo"
-                      value={value}
-                      onChange={handleValueChange}
-                      required
+                </li>
+                {item.editing && (
+                  <input
+                    className="edit-todo"
+                    value={value}
+                    onChange={handleValueChange}
+                    required
+                  />
+                )}
+                <span>
+                  {!item.editing && (
+                    // <button
+                    //   className="btn-edit"
+                    //   onClick={() => {
+                    //     handleUpdate(item);
+                    //   }}
+                    // >
+                    //   Edit
+                    // </button>
+                    <FontAwesomeIcon
+                      className="icon-edit"
+                      icon={faEdit}
+                      onClick={() => {
+                        handleUpdate(item);
+                      }}
+                      style={{ fontSize: 25 }}
                     />
                   )}
-                  <span>
-                    {!item.editing && (
-                      // <button
-                      //   className="btn-edit"
-                      //   onClick={() => {
-                      //     handleUpdate(item);
-                      //   }}
-                      // >
-                      //   Edit
-                      // </button>
-                      <FontAwesomeIcon
-                        className="icon-edit"
-                        icon={faEdit}
-                        onClick={() => {
-                          handleUpdate(item);
-                        }}
-                        style={{ fontSize: 25 }}
-                      />
-                    )}
-                    {item.editing && (
-                      // <button className="btn-edit" onClick={handleSubmit}>
-                      //   Save
-                      // </button>
-                      <FontAwesomeIcon
-                        className="icon-edit"
-                        icon={faCheck}
-                        onClick={handleSubmit}
-                        style={{ fontSize: 25 }}
-                      />
-                    )}
+                  {item.editing && (
+                    // <button className="btn-edit" onClick={handleSubmit}>
+                    //   Save
+                    // </button>
+                    <FontAwesomeIcon
+                      className="icon-edit"
+                      icon={faCheck}
+                      onClick={handleSubmit}
+                      style={{ fontSize: 25 }}
+                    />
+                  )}
 
-                    {item.editing && (
-                      // <button className="btn-delete" onClick={() => handleCancel()}>
-                      //   Cancel
-                      // </button>
-                      <FontAwesomeIcon
-                        icon={faTimes}
-                        className="icon-delete"
-                        onClick={() => handleCancel()}
-                        style={{ fontSize: 25 }}
-                      />
-                    )}
-                    {!item.editing && (
-                      // <button
-                      //   className="btn-delete"
-                      //   onClick={() => handleDelete(item.id)}
-                      // >
-                      //   Delete
-                      // </button>
-                      <FontAwesomeIcon
-                        className="icon-delete"
-                        icon={faTrashAlt}
-                        onClick={() => handleDelete(item.id)}
-                        style={{ fontSize: 25 }}
-                      />
-                    )}
-                  </span>
-                </li>
+                  {item.editing && (
+                    // <button className="btn-delete" onClick={() => handleCancel()}>
+                    //   Cancel
+                    // </button>
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      className="icon-delete"
+                      onClick={() => handleCancel()}
+                      style={{ fontSize: 25 }}
+                    />
+                  )}
+                  {!item.editing && (
+                    // <button
+                    //   className="btn-delete"
+                    //   onClick={() => handleDelete(item.id)}
+                    // >
+                    //   Delete
+                    // </button>
+                    <FontAwesomeIcon
+                      className="icon-delete"
+                      icon={faTrashAlt}
+                      onClick={() => handleDelete(item.id)}
+                      style={{ fontSize: 25 }}
+                    />
+                  )}
+                </span>
               </div>
             );
           })}
@@ -294,4 +293,4 @@ function AddTodo() {
   );
 }
 
-export default AddTodo;
+export default Todolist;

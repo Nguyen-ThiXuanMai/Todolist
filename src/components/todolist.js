@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from "react";
 import {
-  faCheck,
   faEdit,
-  faSpinner,
-  faTimes,
+  faPlus,
+  faCheck,
   faTrashAlt,
+  faTimes,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../App.css";
+import React, { useEffect, useState } from "react";
+import "./style.css";
+import ButtonComponent from "./ButtonComponent";
+import FlipMove from "react-flip-move";
 
-function Todolist() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+export const TodoList = () => {
   const [todoList, setTodoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
   const [name, setName] = useState("");
   const [needLoadAgain, setNeedLoadAgain] = useState(false);
-  const [editing, setEditing] = useState(""); //khi cần xác định dòng nào đang sửa
+  const [editing, setEditing] = useState("");
 
-  //Get Todolist
+  // const refInput = useRef(null);
+
   useEffect(() => {
     setIsLoading(true);
     fetch("https://60d02d3b7de0b20017107d55.mockapi.io/todo", {
@@ -27,13 +30,15 @@ function Todolist() {
       .then((res) => res.json())
       .then(
         (result) => {
-          setTodoList(result);
-          setNeedLoadAgain(false);
+          const results = result.map((item) => {
+            return { ...item, editing: false };
+          });
+          setTodoList(results);
           setIsLoading(false);
+          setNeedLoadAgain(false);
         },
         (error) => {
           setIsLoading(false);
-          setError(error);
         }
       );
   }, [needLoadAgain]);
@@ -46,7 +51,6 @@ function Todolist() {
     setValue(e.target.value);
   }
 
-  //Create item
   function handleSubmit(e) {
     e.preventDefault();
     if (!editing) {
@@ -57,7 +61,6 @@ function Todolist() {
           name: name,
         }),
       };
-
       fetch("https://60d02d3b7de0b20017107d55.mockapi.io/todo", requestOptions)
         .then((res) => res.json())
         .then(
@@ -65,9 +68,7 @@ function Todolist() {
             setNeedLoadAgain(true);
             setName("");
           },
-          (error) => {
-            setError(error);
-          }
+          (error) => {}
         );
     } else {
       const requestOptions = {
@@ -90,29 +91,11 @@ function Todolist() {
           },
           (error) => {
             setIsLoading(true);
-            setError(error);
           }
         );
     }
   }
 
-  //Update item
-  function handleUpdate(item) {
-    //đổ dữ liệu hiện có lên input
-    setValue(item.name);
-    //set editing bằng true để đổi icon
-    setEditing(item.id);
-    //map lại todolist để hiện thị phần tử đang được sửa, đánh dấu ptu đang đc sửa
-    const newTodolist = todoList.map((todo) => {
-      return item.id === todo.id
-        ? { ...todo, editing: true }
-        : { ...todo, editing: false };
-    });
-    setTodoList(newTodolist);
-    //
-  }
-
-  //Delete
   function handleDelete(idDelete) {
     fetch("https://60d02d3b7de0b20017107d55.mockapi.io/todo/" + idDelete, {
       method: "DELETE",
@@ -125,17 +108,8 @@ function Todolist() {
         },
         (error) => {
           setIsLoading(true);
-          setError(error);
         }
       );
-  }
-
-  function handleCancel() {
-    //đổ dữ liệu hiện có lên input
-    setValue("");
-    setNeedLoadAgain(true);
-    setEditing(false);
-    //
   }
 
   function handleClickToDo(item) {
@@ -159,134 +133,147 @@ function Todolist() {
         },
         (error) => {
           setIsLoading(true);
-          setError(error);
         }
       );
   }
 
+  function handleEdit(item) {
+    setValue(item.name);
+    setEditing(item.id);
+    const newTodolist = todoList.map((todo) => {
+      return item.id === todo.id
+        ? { ...todo, editing: true }
+        : { ...todo, editing: false };
+    });
+    setTodoList(newTodolist);
+  }
+
+  // useEffect(() => {
+  //   if (value && refInput) refInput.current.focus();
+  // }, [value]);
+
+  function handleCancel() {
+    setValue("");
+    setNeedLoadAgain(true);
+    setEditing(false);
+  }
+
   return (
-    <div>
-      <img
-        style={{ height: 150, marginLeft: "40%" }}
-        src="./images/logo-todolist.png"
-      />
-      <div style={{ marginLeft: "40%", marginBottom: 20 }}>
-        <label className="title-text">To Do List 😍😘😍</label>
-        {error && <alert>Error: {error.message}</alert>}
-        {isLoading && (
-          <FontAwesomeIcon icon={faSpinner} style={{ fontSize: 25 }} />
-        )}
+    <div className="container">
+      <div className="title">
+        <span>To Do List</span>
+        <div className="loading">
+          {isLoading && (
+            <FontAwesomeIcon icon={faSpinner} style={{ fontSize: 25 }} />
+          )}
+        </div>
       </div>
-      <form className="create-todoList" onSubmit={handleSubmit}>
+
+      <form
+        className="create-todo-container"
+        style={{ position: "relative" }}
+        onSubmit={handleSubmit}
+      >
         <input
-          className="input-todoList"
+          className="input-style"
           value={name}
-          placeholder="✍ Add todo ..."
+          placeholder="Add new todo"
           onChange={handleValueCreate}
           required
         />
-        {/* <button className="btn-icon" type="submit"> */}
-        {/* <FontAwesomeIcon icon={editing ? faSave : faPlus} /> */}
-        {/* <FontAwesomeIcon icon={faPlus} />
-        </button> */}
-      </form>{" "}
-      <ul className="list-todo">
+        <button
+          className="btn-add-todo"
+          style={{ position: "absolute", right: 0 }}
+          type="submit"
+        >
+          <FontAwesomeIcon
+            style={{ color: "#fff", fontSize: 16 }}
+            icon={faPlus}
+          />
+        </button>
+      </form>
+      <div className="list-todo-container">
         {todoList.map((item) => {
           return (
-            <div>
-              <li key={item.id} onClick={() => handleClickToDo(item)}>
-                <input
-                  type="checkbox"
-                  className="box-check"
-                  checked={item.status === "did" ? true : false} //number, undefined, null, 0 --> true false/ {}, "" -> true
-                />
-
+            <FlipMove
+              duration={1000}
+              easing="ease-in-out"
+              className="todo-container"
+              key={item.id}
+            >
+              <div className="todo-content">
                 {!item.editing && (
-                  <label
-                    className={`title-todo ${
-                      item.status === "did" ? "todo-did" : ""
-                    }`} // công thức: `... ${} ... ` viết phương thức bên trong
-                    // className="title-todo"
-                    // style={{
-                    //   textDecoration:
-                    //     item.status === "did" ? "line-through" : "",
-                    // }}
-                  >
-                    {item.name}
-                  </label>
-                )}
-              </li>
-              {item.editing && (
-                <input
-                  className="edit-todo"
-                  value={value}
-                  onChange={handleValueChange}
-                  required
-                />
-              )}
-              <span>
-                {!item.editing && (
-                  // <button
-                  //   className="btn-edit"
-                  //   onClick={() => {
-                  //     handleUpdate(item);
-                  //   }}
-                  // >
-                  //   Edit
-                  // </button>
-                  <FontAwesomeIcon
-                    className="icon-edit"
-                    icon={faEdit}
-                    onClick={() => {
-                      handleUpdate(item);
-                    }}
-                    style={{ fontSize: 25 }}
-                  />
+                  <>
+                    <input
+                      onClick={() => handleClickToDo(item)}
+                      type="checkbox"
+                      className="checkbox-style"
+                      checked={item.status === "did" ? true : false}
+                    />
+                    <div
+                      onClick={() => handleClickToDo(item)}
+                      className={`${item.status === "did" ? "todo-did" : ""}`}
+                    >
+                      {item.name}
+                    </div>
+                  </>
                 )}
                 {item.editing && (
-                  // <button className="btn-edit" onClick={handleSubmit}>
-                  //   Save
-                  // </button>
-                  <FontAwesomeIcon
-                    className="icon-edit"
-                    icon={faCheck}
-                    onClick={handleSubmit}
-                    style={{ fontSize: 25 }}
+                  <input
+                    className="edit-input-style"
+                    value={value}
+                    onChange={handleValueChange}
+                    autoFocus
                   />
                 )}
+              </div>
 
-                {item.editing && (
-                  // <button className="btn-delete" onClick={() => handleCancel()}>
-                  //   Cancel
-                  // </button>
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    className="icon-delete"
-                    onClick={() => handleCancel()}
-                    style={{ fontSize: 25 }}
-                  />
+              <div className="todo-action">
+                {item.status === "todo" && (
+                  <>
+                    {!item.editing && (
+                      <ButtonComponent
+                        style={{ marginRight: 4 }}
+                        onClick={() => {
+                          handleEdit(item);
+                        }}
+                      >
+                        <FontAwesomeIcon className="btn-edit" icon={faEdit} />
+                      </ButtonComponent>
+                    )}
+                    {item.editing && (
+                      <ButtonComponent
+                        style={{ marginRight: 4 }}
+                        onClick={handleSubmit}
+                      >
+                        <FontAwesomeIcon className="btn-edit" icon={faCheck} />
+                      </ButtonComponent>
+                    )}
+
+                    {!item.editing && (
+                      <ButtonComponent onClick={() => handleDelete(item.id)}>
+                        <FontAwesomeIcon
+                          className="btn-delete"
+                          icon={faTrashAlt}
+                        />
+                      </ButtonComponent>
+                    )}
+
+                    {item.editing && (
+                      <ButtonComponent onClick={() => handleCancel()}>
+                        <FontAwesomeIcon
+                          className="btn-delete"
+                          icon={faTimes}
+                        />
+                      </ButtonComponent>
+                    )}
+                  </>
                 )}
-                {!item.editing && (
-                  // <button
-                  //   className="btn-delete"
-                  //   onClick={() => handleDelete(item.id)}
-                  // >
-                  //   Delete
-                  // </button>
-                  <FontAwesomeIcon
-                    className="icon-delete"
-                    icon={faTrashAlt}
-                    onClick={() => handleDelete(item.id)}
-                    style={{ fontSize: 25 }}
-                  />
-                )}
-              </span>
-            </div>
+              </div>
+            </FlipMove>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
-}
-
-export default Todolist;
+};
